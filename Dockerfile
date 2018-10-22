@@ -2,12 +2,12 @@ ARG TELEGRAF_VERSION=1.7.0
 ARG GO_VERSION=1.10.1
 
 
-FROM circleci/golang:${GO_VERSION} AS builder
+FROM golang:${GO_VERSION}-stretch AS builder
 
 ARG TELEGRAF_VERSION
 
-RUN sudo apt-get update \
-  && DEBIAN_FRONTEND=noninteractive sudo apt-get install -y --no-install-recommends \
+RUN apt-get update \
+  && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
       autoconf \
       libtool \
       python \
@@ -15,8 +15,8 @@ RUN sudo apt-get update \
       rpm \
       ruby \
       ruby-dev \
-  && sudo rm -rf /var/lib/apt/lists/* \
-  && sudo gem install fpm
+  && rm -rf /var/lib/apt/lists/* \
+  && gem install fpm
 
 RUN go get -d github.com/influxdata/telegraf \
   && cd /go/src/github.com/influxdata/telegraf \
